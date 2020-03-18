@@ -2,6 +2,7 @@
 #include <string>
 #include <android/log.h>
 
+//返回一个字符串
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_nk_jnitypetest_MainActivity_stringFromJNI(
         JNIEnv *env,
@@ -10,6 +11,7 @@ Java_com_nk_jnitypetest_MainActivity_stringFromJNI(
     return env->NewStringUTF(hello.c_str());
 }
 
+//返回一个数字
 extern "C"
 JNIEXPORT jint JNICALL
 Java_com_nk_jnitypetest_MainActivity_intFromJNI(JNIEnv *env, jobject thiz) {
@@ -17,6 +19,7 @@ Java_com_nk_jnitypetest_MainActivity_intFromJNI(JNIEnv *env, jobject thiz) {
     return 100;
 }
 
+//返回传入的字符串，做处理
 extern "C"
 JNIEXPORT jstring JNICALL
 Java_com_nk_jnitypetest_MainActivity_stringFromJNI2(JNIEnv *env, jobject thiz, jstring str) {
@@ -27,6 +30,7 @@ Java_com_nk_jnitypetest_MainActivity_stringFromJNI2(JNIEnv *env, jobject thiz, j
     return env->NewStringUTF(s.c_str());
 }
 
+//返回传入的数字做处理
 extern "C"
 JNIEXPORT jfloat JNICALL
 Java_com_nk_jnitypetest_MainActivity_intFromJNI2(JNIEnv *env, jobject thiz, jfloat num) {
@@ -35,6 +39,7 @@ Java_com_nk_jnitypetest_MainActivity_intFromJNI2(JNIEnv *env, jobject thiz, jflo
     return num;
 }
 
+//返回一个对象 使用无参构造函数
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objFromJNI(JNIEnv *env, jobject thiz) {
@@ -59,6 +64,7 @@ Java_com_nk_jnitypetest_MainActivity_objFromJNI(JNIEnv *env, jobject thiz) {
     return obj;
 }
 
+//返回一个对象 使用有参数构造函数
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objFromJNI2(JNIEnv *env, jobject thiz) {
@@ -74,6 +80,7 @@ Java_com_nk_jnitypetest_MainActivity_objFromJNI2(JNIEnv *env, jobject thiz) {
     return obj;
 }
 
+//返回一个对象数组
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI(JNIEnv *env, jobject thiz) {
@@ -92,6 +99,7 @@ Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI(JNIEnv *env, jobject thiz) {
     return objArray;
 }
 
+//返回一个二维对象数组
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI2(JNIEnv *env, jobject thiz) {
@@ -125,7 +133,7 @@ Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI2(JNIEnv *env, jobject thiz) {
 }
 
 
-
+//返回一个ArrayList<Object>
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_listFromJNI(JNIEnv *env, jobject thiz) {
@@ -149,6 +157,7 @@ Java_com_nk_jnitypetest_MainActivity_listFromJNI(JNIEnv *env, jobject thiz) {
     return objList;
 }
 
+//传入一个对象 从java向cpp传值
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_nk_jnitypetest_MainActivity_objToJNI(JNIEnv *env, jobject thiz, jobject a) {
@@ -173,6 +182,7 @@ Java_com_nk_jnitypetest_MainActivity_objToJNI(JNIEnv *env, jobject thiz, jobject
     return;
 }
 
+//传入一个对象 从cpp向java传值
 extern "C"
 JNIEXPORT void JNICALL
 Java_com_nk_jnitypetest_MainActivity_objToJNI2(JNIEnv *env, jobject thiz, jobject a) {
@@ -193,7 +203,7 @@ Java_com_nk_jnitypetest_MainActivity_objToJNI2(JNIEnv *env, jobject thiz, jobjec
     return;
 }
 
-
+//返回一个对象 成员是复杂类型
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI(JNIEnv *env, jobject thiz) {
@@ -214,6 +224,7 @@ Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI(JNIEnv *env, jobject thiz) {
     return objb;
 }
 
+//返回一个对象 方法的参数是复杂类型
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI2(JNIEnv *env, jobject thiz) {
