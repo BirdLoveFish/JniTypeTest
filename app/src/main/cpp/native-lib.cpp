@@ -2,6 +2,8 @@
 #include <string>
 #include <android/log.h>
 
+#define Tag "jni"
+
 //返回一个字符串
 extern "C" JNIEXPORT jstring JNICALL
 Java_com_nk_jnitypetest_MainActivity_stringFromJNI(
@@ -44,21 +46,21 @@ extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objFromJNI(JNIEnv *env, jobject thiz) {
     //获取类型
-    jclass cls = env->FindClass("com/nk/jnitypetest/A");
+    jclass cls = env->FindClass("com/nk/jnitypetest/Student");
     //获取构造无参函数
     jmethodID id = env->GetMethodID(cls, "<init>", "()V");
     //获取属性的id
-    jfieldID jfa = env->GetFieldID(cls, "a", "I");
-    jfieldID jfaa = env->GetFieldID(cls, "aa", "Ljava/lang/String;");
-    jfieldID jfaaa = env->GetFieldID(cls, "aaa", "Z");
+    jfieldID jfage = env->GetFieldID(cls, "age", "I");
+    jfieldID jfname = env->GetFieldID(cls, "name", "Ljava/lang/String;");
+    jfieldID jfisMale = env->GetFieldID(cls, "isMale", "Z");
     //定义一个字符串
-    jstring jaa = env->NewStringUTF("aa");
+    jstring jaa = env->NewStringUTF("张三");
     //类型实例
-    jobject obj = env->NewObject(cls, id, nullptr);
+    jobject obj = env->NewObject(cls, id);
     //设置属性的值
-    env->SetIntField(obj,jfa,1);
-    env->SetObjectField(obj,jfaa,jaa);
-    env->SetBooleanField(obj,jfaaa, true);
+    env->SetIntField(obj,jfage,18);
+    env->SetObjectField(obj,jfname,jaa);
+    env->SetBooleanField(obj,jfisMale, true);
     //回收不用的值
     env->DeleteLocalRef(jaa);
     return obj;
@@ -68,15 +70,15 @@ Java_com_nk_jnitypetest_MainActivity_objFromJNI(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objFromJNI2(JNIEnv *env, jobject thiz) {
-    jclass cls = env->FindClass("com/nk/jnitypetest/A");
+    jclass cls = env->FindClass("com/nk/jnitypetest/Student");
 
     //获取有参构造函数
     jmethodID id = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;Z)V");
 
-    jstring jaa = env->NewStringUTF("aa2");
+    jstring jname = env->NewStringUTF("李四");
     //类型实例
-    jobject obj = env->NewObject(cls, id, 2,jaa,true);
-    env->DeleteLocalRef(jaa);
+    jobject obj = env->NewObject(cls, id, 28, jname, false);
+    env->DeleteLocalRef(jname);
     return obj;
 }
 
@@ -84,18 +86,19 @@ Java_com_nk_jnitypetest_MainActivity_objFromJNI2(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI(JNIEnv *env, jobject thiz) {
+    int length = 5;
 
-    jclass cls = env->FindClass("com/nk/jnitypetest/A");
+    jclass cls = env->FindClass("com/nk/jnitypetest/Student");
     jmethodID id = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;Z)V");
-    jstring jaa = env->NewStringUTF("aa2");
-    jobjectArray  objArray = env->NewObjectArray(10, cls, nullptr);
+    jstring jname = env->NewStringUTF("王五");
+    jobjectArray  objArray = env->NewObjectArray(length, cls, nullptr);
 
-    for(int i=0;i<10;i++){
-        jobject obj = env->NewObject(cls, id, i, jaa,true);
+    for(int i=0;i<length;i++){
+        jobject obj = env->NewObject(cls, id, i, jname,true);
         env->SetObjectArrayElement(objArray, i, obj);
         env->DeleteLocalRef(obj);
     }
-    env->DeleteLocalRef(jaa);
+    env->DeleteLocalRef(jname);
     return objArray;
 }
 
@@ -103,24 +106,26 @@ Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT jobjectArray JNICALL
 Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI2(JNIEnv *env, jobject thiz) {
+    int len1 = 3;
+    int len2 = 4;
+
     //获取对象
-    jclass cls = env->FindClass("com/nk/jnitypetest/A");
+    jclass cls = env->FindClass("com/nk/jnitypetest/Student");
     jmethodID id = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;Z)V");
     //获得一维对象数组实例
-    jobjectArray objArr = env->NewObjectArray(5, cls, nullptr);
+    jobjectArray objArr = env->NewObjectArray(len1, cls, nullptr);
     //获得一维数组对象的类型
     jclass cla = env->GetObjectClass(objArr);
     env->DeleteLocalRef(objArr);
     //获得二维数组对象的类型
-    jobjectArray pArray = env->NewObjectArray(5, cla, nullptr);
+    jobjectArray pArray = env->NewObjectArray(len2, cla, nullptr);
 
-
-    for(int i=0;i<5;i++){
-        jobjectArray temp = env->NewObjectArray(5, cls, nullptr);
-        for(int j=0;j<5;j++){
-            jstring jaa = env->NewStringUTF("aa2");
-            jobject obj = env->NewObject(cls, id, j, jaa,true);
-            env->DeleteLocalRef(jaa);
+    for(int i=0;i<len2;i++){
+        jobjectArray temp = env->NewObjectArray(len1, cls, nullptr);
+        for(int j=0;j<len1;j++){
+            jstring jname = env->NewStringUTF("赵六");
+            jobject obj = env->NewObject(cls, id, j, jname,true);
+            env->DeleteLocalRef(jname);
 
             env->SetObjectArrayElement(temp, j, obj);
             env->DeleteLocalRef(obj);
@@ -137,21 +142,23 @@ Java_com_nk_jnitypetest_MainActivity_arrObjFromJNI2(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_listFromJNI(JNIEnv *env, jobject thiz) {
-    jclass cls = env->FindClass("com/nk/jnitypetest/A");
+    int len = 5;
+
+    jclass cls = env->FindClass("com/nk/jnitypetest/Student");
     jmethodID id = env->GetMethodID(cls, "<init>", "(ILjava/lang/String;Z)V");
 
     jclass cla = env->FindClass("java/util/ArrayList");
     jmethodID idInit = env->GetMethodID(cla, "<init>", "()V");
     jmethodID idAdd = env->GetMethodID(cla, "add", "(Ljava/lang/Object;)Z");
 
-    jobject objList = env->NewObject(cla, idInit, nullptr);
+    jobject objList = env->NewObject(cla, idInit);
 
-    for(int i=0;i<5;i++){
-        jstring jaa = env->NewStringUTF("aa2");
-        jobject obj = env->NewObject(cls, id, i, jaa,true);
-        env->DeleteLocalRef(jaa);
+    for(int i=0;i<len;i++){
+        jstring jname = env->NewStringUTF("孙七");
+        jobject obj = env->NewObject(cls, id, i, jname,true);
+        env->DeleteLocalRef(jname);
 
-        env->CallObjectMethod(objList,idAdd,obj);
+        env->CallBooleanMethod(objList,idAdd,obj);
         env->DeleteLocalRef(obj);
     }
     return objList;
@@ -163,21 +170,22 @@ JNIEXPORT void JNICALL
 Java_com_nk_jnitypetest_MainActivity_objToJNI(JNIEnv *env, jobject thiz, jobject a) {
     jclass cls = env->GetObjectClass(a);
 
-    jfieldID jfa = env->GetFieldID(cls, "a", "I");
-    jfieldID jfaa = env->GetFieldID(cls, "aa", "Ljava/lang/String;");
-    jfieldID jfaaa = env->GetFieldID(cls, "aaa", "Z");
+    jfieldID jfage = env->GetFieldID(cls, "age", "I");
+    jfieldID jfname = env->GetFieldID(cls, "name", "Ljava/lang/String;");
+    jfieldID jfisMale = env->GetFieldID(cls, "isMale", "Z");
 
-    jint aInt = env->GetIntField(a, jfa);
-    jstring aaString = (jstring)env->GetObjectField(a, jfaa);
-    jboolean aaaBool = env->GetBooleanField(a, jfaaa);
+    jint ageInt = env->GetIntField(a, jfage);
+    jstring nameString = (jstring)env->GetObjectField(a, jfname);
+    jboolean isMaleBool = env->GetBooleanField(a, jfisMale);
 
-    const  char * aa = env->GetStringUTFChars(aaString, 0);
+    const  char * name = env->GetStringUTFChars(nameString, 0);
 
-    __android_log_print(ANDROID_LOG_DEBUG, "jni","aInt:%d",aInt);
-    __android_log_print(ANDROID_LOG_DEBUG, "jni","aaString:%s",aa);
-    __android_log_print(ANDROID_LOG_DEBUG, "jni","aaaBool:%d",aaaBool);
+    __android_log_print(ANDROID_LOG_DEBUG, Tag, "*****测试传入一个对象 从java向cpp传值*****");
+    __android_log_print(ANDROID_LOG_DEBUG, Tag, "ageInt:%d",ageInt);
+    __android_log_print(ANDROID_LOG_DEBUG, Tag, "name:%s",name);
+    __android_log_print(ANDROID_LOG_DEBUG, Tag, "isMaleBool:%d",isMaleBool);
 
-    env->ReleaseStringUTFChars(aaString,aa);
+    env->ReleaseStringUTFChars(nameString,name);
 
     return;
 }
@@ -188,17 +196,17 @@ JNIEXPORT void JNICALL
 Java_com_nk_jnitypetest_MainActivity_objToJNI2(JNIEnv *env, jobject thiz, jobject a) {
     jclass cls = env->GetObjectClass(a);
 
-    jfieldID jfa = env->GetFieldID(cls, "a", "I");
-    jfieldID jfaa = env->GetFieldID(cls, "aa", "Ljava/lang/String;");
-    jfieldID jfaaa = env->GetFieldID(cls, "aaa", "Z");
+    jfieldID jfage = env->GetFieldID(cls, "age", "I");
+    jfieldID jfname = env->GetFieldID(cls, "name", "Ljava/lang/String;");
+    jfieldID jfisMale = env->GetFieldID(cls, "isMale", "Z");
 
-    jstring aa = env->NewStringUTF("objToJNI2");
+    jstring name = env->NewStringUTF("objToJNI2");
 
-    env->SetIntField(a, jfa, 100);
-    env->SetObjectField(a, jfaa, aa);
-    env->SetBooleanField(a, jfaaa, true);
+    env->SetIntField(a, jfage, 100);
+    env->SetObjectField(a, jfname, name);
+    env->SetBooleanField(a, jfisMale, true);
 
-    env->DeleteLocalRef(aa);
+    env->DeleteLocalRef(name);
 
     return;
 }
@@ -207,16 +215,16 @@ Java_com_nk_jnitypetest_MainActivity_objToJNI2(JNIEnv *env, jobject thiz, jobjec
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI(JNIEnv *env, jobject thiz) {
-    jclass clz = env->FindClass("com/nk/jnitypetest/A");
+    jclass clz = env->FindClass("com/nk/jnitypetest/Student");
     jmethodID idz = env->GetMethodID(clz, "<init>", "(ILjava/lang/String;Z)V");
-    jstring jaa = env->NewStringUTF("aa2");
-    jobject obj = env->NewObject(clz, idz, 100, jaa,true);
-    env->DeleteLocalRef(jaa);
+    jstring jname = env->NewStringUTF("钱八");
+    jobject obj = env->NewObject(clz, idz, 100, jname,true);
+    env->DeleteLocalRef(jname);
 
-    jclass cls = env->FindClass("com/nk/jnitypetest/B");
+    jclass cls = env->FindClass("com/nk/jnitypetest/School");
     jmethodID id = env->GetMethodID(cls, "<init>", "()V");
     //必须要在类型前面加上L，否则无法识别
-    jfieldID jfa = env->GetFieldID(cls, "a", "Lcom/nk/jnitypetest/A;");
+    jfieldID jfa = env->GetFieldID(cls, "student", "Lcom/nk/jnitypetest/Student;");
 
     jobject  objb = env->NewObject(cls, id);
     env->SetObjectField(objb, jfa,  obj);
@@ -228,16 +236,16 @@ Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI(JNIEnv *env, jobject thiz) {
 extern "C"
 JNIEXPORT jobject JNICALL
 Java_com_nk_jnitypetest_MainActivity_objPorpertyJNI2(JNIEnv *env, jobject thiz) {
-    jclass clz = env->FindClass("com/nk/jnitypetest/A");
+    jclass clz = env->FindClass("com/nk/jnitypetest/Student");
     jmethodID idz = env->GetMethodID(clz, "<init>", "(ILjava/lang/String;Z)V");
-    jstring jaa = env->NewStringUTF("aa2");
-    jobject obj = env->NewObject(clz, idz, 100, jaa,true);
-    env->DeleteLocalRef(jaa);
+    jstring jname = env->NewStringUTF("objPorpertyJNI2");
+    jobject obj = env->NewObject(clz, idz, 500, jname,true);
+    env->DeleteLocalRef(jname);
 
-    jclass cls = env->FindClass("com/nk/jnitypetest/B");
+    jclass cls = env->FindClass("com/nk/jnitypetest/School");
     jmethodID id = env->GetMethodID(cls, "<init>", "()V");
     //必须要在类型前面加上L，否则无法识别
-    jmethodID jid = env->GetMethodID(cls, "Fun", "(Lcom/nk/jnitypetest/A;)Lcom/nk/jnitypetest/A;");
+    jmethodID jid = env->GetMethodID(cls, "getStudent", "(Lcom/nk/jnitypetest/Student;)Lcom/nk/jnitypetest/Student;");
 
     jobject  objb = env->NewObject(cls, id);
     jobject objbResult = env->CallObjectMethod(objb, jid, obj);
