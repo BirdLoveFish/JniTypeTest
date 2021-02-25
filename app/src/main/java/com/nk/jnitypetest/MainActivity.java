@@ -148,13 +148,6 @@ public class MainActivity extends AppCompatActivity {
          *      返回一个对象 方法的参数是复杂类型
          *
          * */
-//        Log.d(Tag, "*****返回一个对象 方法的参数是复杂类型*****");
-//        School school2 = objPorpertyJNI2();
-//        school2.student = new Student(99,"ddd",true);
-//        Student stu = school2.getStudent(school1.student);
-//        Log.d(Tag, "对象的age: " + stu.age);
-//        Log.d(Tag, "对象的name: " + stu.name);
-//        Log.d(Tag, "对象的isMale: " + stu.isMale);
 
         Log.d(Tag, "*****返回一个对象 方法的参数是复杂类型*****");
         Student stuObjPorpertyJNI2 = objPorpertyJNI2();
